@@ -1,0 +1,433 @@
+//高中自己設計的遊戲
+import time
+import random
+
+dict1 = {"石頭":10,"木頭":10,"食物":10,"金幣":0,"農場":0,"礦場":0,"伐木場":0 }
+dict2 = {"天數":0}
+dict3 = {"move":True}
+dict4 = {"army":10}
+dict5 = {"hatred":10}
+def notattack():
+    print("敵方並沒有對我們發動攻擊，謝天謝地.....")
+    time.sleep(3)
+def bigattack():
+             print("敵方對我們展開大屠殺!!")
+             time.sleep(3)
+             print("大量的士兵皆戰死於此.....")
+             time.sleep(3)
+             if dict4["army"]>8:
+                 dict4["army"]=3
+             elif 8>dict4["army"]>5:
+                 dict4["army"]=2
+             elif dict4["army"]<=5:
+                 dict4["army"]=1
+             print("敵軍仇恨值全部歸零")
+             time.sleep(2)
+             dict5["hatred"]=0
+def attack():
+     print("敵方對我們發動了總攻擊!")
+     time.sleep(3)
+     print("我們的軍隊和村民正戰鬥著.....")
+     time.sleep(3)
+
+     enemy=random.randint(0,(dict2["天數"]/10)*4-2)
+     if dict4["army"]-enemy>=3:
+             print("我們的力量強大，我們成功抵擋了敵方的軍勢")
+             time.sleep(3)
+             print("但我們也失去了一些軍隊")
+             time.sleep(3)
+             dict4["army"]=dict4["army"]-enemy+1
+             print("敵軍仇恨值減少3點")
+             time.sleep(2)
+             dict5["hatred"]=dict5["hatred"]-3
+     elif 0<=dict4["army"]-enemy<3:
+             print("敵方和我們勢均力敵，我們還是成功抵擋了敵方的軍勢")
+             time.sleep(3)
+             print("但我們也失去了一些軍隊")
+             time.sleep(3)
+             dict4["army"]=dict4["army"]-enemy
+             print("敵軍仇恨值減少4點")
+             time.sleep(2)
+             dict5["hatred"]=dict5["hatred"]-4
+     elif -2<=dict4["army"]-enemy<0:
+             print("雖然敵方軍力比我們強大，但我們還成功抵擋了敵方的軍勢")
+             time.sleep(3)
+             print("但我們也失去了全部的軍隊")
+             time.sleep(3)
+             dict4["army"]=dict4["army"]-dict4["army"]
+             print("敵軍仇恨值減少5點")
+             time.sleep(2)
+             dict5["hatred"]=dict5["hatred"]-5
+     elif dict4["army"]-enemy<-2:
+             print("我們未抵擋敵方的勢力，我們們王國被敵人摧毀著.....我們輸了....")
+             time.sleep(3)
+             import sys
+             sys.exit()
+def warning():
+    if dict2["天數"]%10==7 :
+        print("國王，我們接受到消息，領外之地有軍隊正在集結中")
+        time.sleep(3)
+        print("可能需要多留意一些....請盡快組好我方軍隊以備不時之需!")
+        time.sleep(3)
+def assualt():
+    if dict2["天數"]%10==0 and dict3["move"]==False:
+        if dict5["hatred"] == 10:
+            bigattack()
+        else :
+            y = random.randint(1,12-dict5["hatred"])
+            if y==1 or y==(12-dict5["hatred"])/2 or y==(12-dict5["hatred"]+1)/2 :
+                attack()
+            else:
+                notattack()
+def randomnum():           
+    if dict2["天數"]%4==0 and dict3["move"]==False:
+        x = random.randint(0,13)
+        if x==1:
+            print("你從你口袋中發現之前遊行時人民給你的獎賞")
+            print("你額外獲得三枚金幣")
+            time.sleep(3)
+            dict1["金幣"] = dict1["金幣"] + 3
+        elif x==2:
+            print("今天的天氣不錯，食物收成增加")
+            print("你額外獲得四個食物")
+            time.sleep(3)
+            dict1["食物"] = dict1["食物"] + 4
+        elif x==3:
+            print("今天在挖礦石中發現廢棄礦坑，石頭收成增加")
+            print("你額外獲得三個石頭")
+            time.sleep(3)
+            dict1["石頭"] = dict1["石頭"] + 3
+        elif x==4:
+            print("今天在伐木中發現稀有樹木，木頭收成增加")
+            print("你額外獲得三個木頭") 
+            time.sleep(3)
+            dict1["木頭"] = dict1["木頭"] + 3
+        elif x==5:
+            print("財政部長在查算時發現你逃漏關稅")
+            print("你被罰款三枚金幣")
+            time.sleep(3)
+            dict1["金幣"] = dict1["金幣"] - 3
+        elif x==6:
+            print("今天的天氣過於炎熱，食物腐敗速度提升")
+            print("你損失四個食物")
+            time.sleep(3)
+            dict1["食物"] = dict1["食物"] - 4
+        elif x==7:
+            print("今天在挖礦石挖到天然氣，冒失的人民點燃礦坑印發爆炸")
+            print("你損失三個石頭")
+            time.sleep(3)
+            dict1["石頭"] = dict1["石頭"] - 3
+        elif x==8:
+            print("今天在伐木中人民被山老鼠襲擊")
+            print("你損失三個木頭") 
+            time.sleep(3)
+            dict1["木頭"] = dict1["木頭"] - 3
+        elif x==9 and dict1["伐木場"]>=1:
+            print("森林大火，導致伐木場被燒毀")
+            print("你損失一個伐木場") 
+            time.sleep(3)
+            dict1["伐木場"] = dict1["伐木場"] - 1
+        elif x==9 and dict1["伐木場"] == 0:
+            print("森林大火，可是您沒有伐木場")
+            print("你今天無任何損失，只是今天的pm2.5比台中還高") 
+            time.sleep(3)
+        elif x==10 and dict1["礦場"]>=1:
+            print("突如其來的地震，造成落石崩塌，導致礦場被摧毀")
+            print("你損失一個礦場") 
+            time.sleep(3)
+            dict1["礦場"] = dict1["礦場"] - 1
+        elif x==10 and dict1["礦場"] == 0:
+            print("突如其來的地震，造成落石崩塌可是您沒有伐木場")
+            print("你今天無任何損失")
+            time.sleep(3)
+        elif x==11 and dict1["礦場"]>=1:
+            print("多年以後一場大雨驚醒沉睡的我，也淹沒了農田")
+            print("你損失一個農場")
+            time.sleep(3)
+            dict1["農場"] = dict1["農場"] - 1
+        elif x==11 and dict1["農場"] == 0:
+            print("多年以後一場大雨驚醒沉睡的我，但你沒有農場")
+            print("你今天無任何損失，只有被驚醒")
+            time.sleep(3)
+        elif x==12:
+            print("你的行動受到人民的愛戴，部落都為此慶祝")
+            print("你獲得了3石頭，3木頭，3食物，3金幣")
+            time.sleep(3)
+            dict1["食物"] = dict1["食物"] + 3
+            dict1['木頭'] = dict1["木頭"] + 3
+            dict1["石頭"] = dict1["石頭"] + 3
+            dict1["金幣"] = dict1["金幣"] + 3
+        elif x==13:
+            print("有小偷在偷神器時不小心打開了潘朵拉的盒子，部落陷入災難之中")
+            print("你損失了3石頭，3木頭，3食物，3金幣")
+            dict1["食物"] = dict1["食物"] - 3
+            dict1['木頭'] = dict1["木頭"] - 3
+            dict1["石頭"] = dict1["石頭"] - 3
+            dict1["金幣"] = dict1["金幣"] - 3
+            time.sleep(3)
+def main():
+    if dict5["hatred"]<=0:
+        dict5["hatred"]=0
+    dict3["move"]=True
+    print("========================================================")
+    print("已經過了",dict2["天數"],"天")
+    print(" ")
+    print("您今天的計畫是?")
+    print(" ")
+    print("您現在有:","石頭:" , dict1["石頭"],"木頭:" , dict1["木頭"],"食物:" , dict1["食物"],"金幣:" , dict1["金幣"])
+    print("農場:" , dict1["農場"],"礦場:" , dict1["礦場"],"伐木場:" , dict1["伐木場"])
+    print("軍隊:",dict4["army"])
+    print(" ")
+    print("1.建造農場(每日+2食物/1農場)")
+    print("2.建造礦場(每日+2石頭/1礦場)")
+    print("3.建造伐木場(每日+2木頭/1伐木場)")
+    print("4.建造世界奇觀")
+    print("5.建立一軍隊(需耗費8個食物)")
+    print(" ")
+    print("兌 換 金 幣 之 選 項 有 :")
+    print("q.7食物 = 2金")
+    print("w.2石頭 ,2木頭 , 4食物 = 2金")
+    print("e.6石頭 , 4木頭 , 4食物 = 3金")
+    print("r.4石頭, 6木頭, 4食物= 3金")
+    print(" ")
+    print("6.出征!帶領軍隊討伐領外部落")
+    print("7.無事可做，休息一天")
+    print(" ")
+    
+def choose(choice):
+    if choice == "1" and dict1["石頭"]>=5 and dict1["木頭"]>=5 :
+        dict1["石頭"]=dict1["石頭"]-5
+        dict1["木頭"] = dict1["木頭"]-5
+        print("建造中請稍後....")
+        time.sleep(1)
+        print("農場已建造完成")
+        dict1["農場"] = dict1["農場"] + 1
+        end()
+    elif choice == "2" and dict1["石頭"]>=7 and dict1["木頭"]>=3 :
+        dict1["石頭"]=dict1["石頭"]-7
+        dict1["木頭"] = dict1["木頭"]-3
+        print("建造中請稍後.....")
+        time.sleep(1)
+        print("礦場建造完成")
+        dict1["礦場"] = dict1["礦場"] + 1
+        end()
+    elif choice == "3" and dict1["石頭"]>=3 and dict1["木頭"]>=7 :
+        dict1["石頭"]=dict1["石頭"]-3
+        dict1["木頭"] = dict1["木頭"]-7
+        print("建造中請稍後")
+        time.sleep(1)
+        print("伐木場已建造完成")
+        dict1["伐木場"] = dict1["伐木場"] + 1
+        end()
+    elif choice == "4" and dict1["石頭"]>=30 and dict1["木頭"]>=30 and dict1["食物"]>=30 and dict1["金幣"]>=30:
+        print("糟了!是世界奇觀!")
+        end()
+        time.sleep(1)
+        print("外面的敵人正在悽慘的叫著呢，國王")
+        time.sleep(2)
+        print("國王，您真的做到了。。。")
+        print("遊戲結束!完結灑花!")
+        print(" ")
+        print(" ")
+        print(" ")
+        print(" ")
+        print(" ")
+        print(" ")
+        print(" ")
+        print(" ")
+        print(" ")
+        print("你一共用了",dict2["天數"],"天完成此遊戲")
+        print("恭喜!")
+        print("製作人:柏豪的新興第十屆畢業學生")
+        print('製作人IG:...........跟隨從的名子一樣')
+        import sys
+        sys.exit()
+    elif choice == "5" and dict1["食物"]>=9:
+        print("訓練中....")
+        time.sleep(2)
+        print("訓練成功，您獲得一群強力的軍隊")
+        dict4["army"]=dict4["army"]+1
+        dict1["食物"]=dict1["食物"]-9
+        end()       
+    elif choice == "q" and dict1["食物"]>=7:
+        dict1["食物"]=dict1["食物"]-7
+        print("交易中請稍後")
+        time.sleep(1)
+        print("交易完成")
+        dict1["金幣"]=dict1["金幣"]+2
+        end()
+    elif choice == "w" and dict1["石頭"]>=2 and dict1["木頭"]>=2 and dict1["食物"]>=4:
+        dict1["石頭"]=dict1["石頭"]-2
+        dict1["木頭"] = dict1["木頭"]-2
+        dict1["食物"]=dict1["食物"]-4
+        print("交易中請稍後")
+        time.sleep(1)
+        print("交易完成")
+        dict1["金幣"]=dict1["金幣"]+2
+        end()
+    elif choice == "e" and dict1["石頭"]>=6 and dict1["木頭"]>=4 and dict1["食物"]>=4:
+        dict1["石頭"]=dict1["石頭"]-6
+        dict1["木頭"] = dict1["木頭"]-4
+        dict1["食物"]=dict1["食物"]-4
+        print("交易中請稍後")
+        time.sleep(1)
+        print("交易完成")
+        dict1["金幣"]=dict1["金幣"]+3
+        end()
+    elif choice == "r" and dict1["石頭"]>=4 and dict1["木頭"]>=6 and dict1["食物"]>=4:
+        dict1["石頭"]=dict1["石頭"]-4
+        dict1["木頭"] = dict1["木頭"]-6
+        dict1["食物"]=dict1["食物"]-4
+        print("交易中請稍後")
+        time.sleep(1)
+        print("交易完成")
+        dict1["金幣"]=dict1["金幣"]+3
+        end()
+    elif choice == "6" and dict4["army"]>0:
+        print("出征!")
+        time.sleep(2)
+        if dict4["army"]<4:
+           j = random.randint(1,10)
+           if j%2==1:
+               print("因為兵力不多，被領外之地的敵人給反殺")
+               time.sleep(2)
+               print("所有軍隊皆沒能平安回來......")
+               time.sleep(2)
+               dict4["army"]=dict4["army"]-dict4["army"]
+               end()
+           else:
+               print("一些軍隊平安的回來了，帶回了一些資源")
+               time.sleep(2)
+               a = random.randint(-1,1)
+               b = random.randint(-1,1)
+               c = random.randint(-1,1)
+               d = random.randint(0,2)
+               aa = dict4["army"]+a
+               bb = dict4["army"]+b
+               cc = dict4["army"]+c
+               dd = dict4["army"]+d
+               print("他們帶回了"+ str(aa) +"個石頭")
+               print("他們帶回了"+ str(bb) +"個木頭")
+               print("他們帶回了"+ str(cc) +"個食物")
+               print("他們帶回了"+ str(dd) +"個金幣")
+               print("但我們也失去了1個軍隊")
+               time.sleep(4)
+               dict4["army"]=dict4["army"]-1
+               dict1["石頭"]=dict1["石頭"] + dict4["army"] +a
+               dict1["木頭"] = dict1["木頭"] + dict4["army"] +b
+               dict1["食物"]=dict1["食物"] + dict4["army"] +c
+               dict1["金幣"]=dict1["金幣"] + dict4["army"] +d
+               dict5["hatred"]=dict5["hatred"]+1
+               end()
+        elif 4<=dict4["army"]<=8:
+               j = random.randint(1,10)
+               if j==3 or j==7:
+                  print("在途中遇到了敵軍襲擊，軍隊避免滅團進而選擇撤退")
+                  time.sleep(2)
+                  print("我們失去了3個軍隊")
+                  time.sleep(2)
+                  print("我們的軍隊受到重挫......")
+                  time.sleep(2)
+                  dict4["army"]=dict4["army"]-3
+                  dict5["hatred"]=dict5["hatred"]+1
+                  end()
+               else:
+                   print("一些軍隊平安的回來了，帶回了一些資源")
+                   time.sleep(2)
+                   a = random.randint(-1,3)
+                   b = random.randint(-1,3)
+                   c = random.randint(-1,3)
+                   d = random.randint(1,4)
+                   aa = dict4["army"]+a
+                   bb = dict4["army"]+b
+                   cc = dict4["army"]+c
+                   dd = dict4["army"]+d
+                   print("他們帶回了"+ str(aa) +"個石頭")
+                   print("他們帶回了"+ str(bb) +"個木頭")
+                   print("他們帶回了"+ str(cc) +"個食物")
+                   print("他們帶回了"+ str(dd) +"個金幣")
+                   time.sleep(4)
+                   dict1["石頭"]=dict1["石頭"] + dict4["army"] +a
+                   dict1["木頭"] = dict1["木頭"] + dict4["army"] +b
+                   dict1["食物"]=dict1["食物"] + dict4["army"] +c
+                   dict1["金幣"]=dict1["金幣"] + dict4["army"] +d
+                   e=random.randint(0,2)
+                   print("我們在途中失去"+str(e)+"個軍隊")
+                   time.sleep(4)
+                   dict4["army"]=dict4["army"]-e
+                   dict5["hatred"]=dict5["hatred"]+2
+                   end()               
+        
+        elif dict4["army"]>8:
+               j = random.randint(1,10)
+               if j==4 or j==10:
+                  print("在途中遇到了大量敵軍襲擊，軍隊避免滅團進而選擇撤退")
+                  time.sleep(2)
+                  print("我們失去了4個軍隊")
+                  time.sleep(2)
+                  print("我們的軍隊受到重挫......")
+                  time.sleep(2)
+                  dict4["army"]=dict4["army"]-4
+                  dict5["hatred"]=dict5["hatred"]+2
+                  end()
+               else:
+                   print("一些軍隊平安的回來了，帶回了一些資源")
+                   time.sleep(2)
+                   a = random.randint(-1,4)
+                   b = random.randint(-1,4)
+                   c = random.randint(-1,4)
+                   d = random.randint(2,5)
+                   aa = dict4["army"]+a
+                   bb = dict4["army"]+b
+                   cc = dict4["army"]+c
+                   dd = dict4["army"]+d
+                   print("他們帶回了"+ str(aa) +"個石頭")
+                   print("他們帶回了"+ str(bb) +"個木頭")
+                   print("他們帶回了"+ str(cc) +"個食物")
+                   print("他們帶回了"+ str(dd) +"個金幣")
+                   time.sleep(4)
+                   dict1["石頭"]=dict1["石頭"] + dict4["army"] +a
+                   dict1["木頭"] = dict1["木頭"] + dict4["army"] +b
+                   dict1["食物"]=dict1["食物"] + dict4["army"] +c
+                   dict1["金幣"]=dict1["金幣"] + dict4["army"] +d
+                   e=random.randint(0,3)
+                   print("我們在途中失去"+str(e)+"個軍隊")
+                   time.sleep(4)
+                   dict4["army"]=dict4["army"]-e
+                   dict5["hatred"]=dict5["hatred"]+3
+                   end()
+    elif choice == "7" :
+        print("一整天無所事事......")
+        end()
+    else:
+        print("糟糕，行動無法執行")
+        
+def end():
+    dict1["石頭"]=dict1["石頭"]+1
+    dict1["木頭"]=dict1["木頭"]+1
+    dict1["食物"]=dict1["食物"]+1
+    dict2["天數"] = dict2["天數"] + 1
+    if dict1["農場"]>0:
+             dict1["食物"]=dict1["食物"]+2*dict1["農場"]
+    if dict1["礦場"]>0:
+             dict1["石頭"] = dict1["石頭"]+2*dict1["礦場"]
+    if dict1["伐木場"]>0:
+             dict1["木頭"] = dict1["木頭"]+2*dict1["伐木場"]
+    dict3["move"]=False
+    if choice == "6" and dict5["hatred"]<10:
+        print("因為你今天出征，領外之地的敵軍仇恨值已達到"+str(dict5["hatred"])+"點數(最高10點)")
+        print("請您一定要注意他們.....")
+        time.sleep(4)
+    elif choice == "6" and dict5["hatred"]>=10:
+        dict5["hatred"]==10
+        print("因為你今天出征，領外之地的敵軍仇恨值已達到最大值!!!")
+        print("請您一定要小心敵軍的行動!")
+        time.sleep(4)
+while True:
+     warning()
+     assualt()
+     randomnum()
+     main()
+     choice=input("請輸入:")
+     choose(choice)
+     print(" ")
